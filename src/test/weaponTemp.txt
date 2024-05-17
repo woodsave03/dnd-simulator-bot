@@ -1,0 +1,6 @@
+Blueprint for *.weapon files
+WeaponGroup Name (Enum, String)
+Damage DamageType (int, int, Enum)
+Property, Property, ... (Enum...)
+*Range/Reach (optional int, int)
+Weight Cost

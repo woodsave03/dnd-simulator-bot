@@ -1,0 +1,5 @@
+Melee Weapon
+Greatsword
+2d6 of slashing damage
++STR
+Heavy, Two-Handed
