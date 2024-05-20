@@ -28,7 +28,7 @@ public class Ability extends Attribute<Ability.Type> {
             throw new IllegalArgumentException("Cannot compare Ability to " + o.getClass().getName());
     }
 
-    public enum Type implements AttributeType<Ability> {
+    public enum Type implements AttributeType {
         STR, DEX, CON, INT, WIS, CHA;
 
         public static Type parse(String s) {
@@ -56,8 +56,8 @@ public class Ability extends Attribute<Ability.Type> {
         }
 
         @Override
-        public Ability retrieve(Source<AttributeType> source) {
-            return (Ability) source.provide(this);
+        public Attribute<AttributeType> retrieve(Source<AttributeType> source) {
+            return source.provide(this);
         }
     }
 }

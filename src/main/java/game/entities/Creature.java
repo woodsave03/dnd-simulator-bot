@@ -1,5 +1,6 @@
 package game.entities;
 
+import communication.Attribute;
 import game.items.Weapon;
 import mechanics.Proficiency;
 import mechanics.RollMode;
@@ -33,15 +34,15 @@ public class Creature extends Entity implements Source<Ability.Type> {
     }
 
     @Override
-    public Ability resolve(Iterator<Ability.Type> options) {
-        Ability best = provide(options.next());
+    public Attribute<Ability.Type> resolve(Iterator<Ability.Type> options) {
+        Ability.Type type = options.next();
         while (options.hasNext()) {
-            Ability next = provide(options.next());
-            if (next.over(best)) {
-                best = next;
+            Ability.Type next = options.next();
+            if (abilities.get(type).compareTo(abilities.get(next)) < 0) {
+                type = next;
             }
         }
-        return best;
+        return abilities.get(type);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Creature extends Entity implements Source<Ability.Type> {
     public int getBonus(Roll roll) {
         if (roll instanceof Contest)
             throw new IllegalArgumentException("Contest rolls need clarification for bonus.");
-        return resolve(roll.getAbilityOptions().iterator()).modifier() +
+        return ((Ability) resolve(roll.getAbilityOptions().iterator())).modifier() +
                 getProficiency(roll);
     }
 
