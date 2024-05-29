@@ -7,11 +7,10 @@ import game.CoinComposite;
 import game.entities.Ability;
 import mechanics.Construct;
 import mechanics.Constructor;
+import mechanics.actions.Attack;
 import mechanics.dice.Damage;
 import mechanics.actions.Roll;
-import mechanics.actions.MeleeAttack;
 import mechanics.actions.Range;
-import mechanics.actions.RangedAttack;
 import mechanics.actions.Save;
 import mechanics.dice.Die;
 import communication.Pair;
@@ -298,14 +297,14 @@ public class BaseWeapon implements Construct {
             Roll result = null;
             switch (rollName) {
                 case BASE_ATTACK -> {
-                    MeleeAttack.Builder builder = new MeleeAttack.Builder().with(this.damage).as(this.name)
+                    Attack.Builder builder = new Attack.Builder().with(this.damage).as(this.name)
                             .with(abilities);
                     if (reach.isPresent())
                         builder = builder.with(2);
                     result = builder.with(group).build();
                 }
                 case RANGED_ATTACK -> {
-                    RangedAttack.Builder builder = new RangedAttack.Builder()
+                    Attack.Builder builder = new Attack.Builder()
                             .with(this.damage).as(this.name + " (Ranged)")
                             .with(abilities).with(group);
                     if (this.range.isPresent())
@@ -313,7 +312,7 @@ public class BaseWeapon implements Construct {
                     result = builder.build();
                 }
                 case VERSATILE_ATTACK -> {
-                    MeleeAttack.Builder builder = new MeleeAttack.Builder()
+                    Attack.Builder builder = new Attack.Builder()
                             .with(this.damage.explode()).as(this.name + " (Versatile)")
                             .with(abilities).with(group);
                     if (this.reach.isPresent())
@@ -321,7 +320,7 @@ public class BaseWeapon implements Construct {
                     result = builder.build();
                 }
                 case THROWN_ATTACK -> {
-                    RangedAttack.Builder builder = new RangedAttack.Builder()
+                    Attack.Builder builder = new Attack.Builder()
                             .with(this.damage).as(this.name + " (Thrown)")
                             .with(abilities).with(group);
                     if (this.range.isPresent())

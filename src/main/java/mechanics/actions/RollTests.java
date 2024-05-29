@@ -16,8 +16,8 @@ import java.util.Set;
 public class RollTests {
     private static Check check1, check2;
     private static Save save;
-    private static RangedAttack rangedAttack;
-    private static MeleeAttack meleeAttack;
+    private static Attack rangedAttack;
+    private static Attack meleeAttack;
     private static Contest contest;
     private static Creature creature1, creature2;
 
@@ -28,7 +28,7 @@ public class RollTests {
         check2 = Check.Factory
                 .create(Skill.ACROBATICS);
         save = Save.Factory.create(Ability.Type.CON, Save.Descriptor.NON_MAGICAL);
-        rangedAttack = new RangedAttack.Builder()
+        rangedAttack = new Attack.Builder()
                 .with(Ability.Type.DEX)
                 .with(20, 60)
                 .with(Weapon.Group.SIMPLE)
@@ -38,7 +38,7 @@ public class RollTests {
                         .build())
                 .as("Example Ranged Attack")
                 .build();
-        meleeAttack = new MeleeAttack.Builder()
+        meleeAttack = new Attack.Builder()
                 .with(Ability.Type.STR)
                 .with(2)
                 .with(Weapon.Group.MARTIAL)
@@ -119,7 +119,7 @@ public class RollTests {
         Save newSave = Save.Factory.create(Ability.Type.CON, Save.Descriptor.NON_MAGICAL);
         Assertions.assertEquals(save, newSave);
 
-        RangedAttack newRangedAttack = new RangedAttack.Builder()
+        Attack newRangedAttack = new Attack.Builder()
                 .with(Ability.Type.DEX)
                 .with(20, 60)
                 .with(Weapon.Group.SIMPLE)
@@ -131,7 +131,7 @@ public class RollTests {
                 .build();
         Assertions.assertEquals(rangedAttack, newRangedAttack);
 
-        MeleeAttack newMeleeAttack = new MeleeAttack.Builder()
+        Attack newMeleeAttack = new Attack.Builder()
                 .with(Ability.Type.STR)
                 .with(2)
                 .with(Weapon.Group.MARTIAL)

@@ -1,5 +1,7 @@
 package mechanics.actions;
 
+import game.entities.Creature;
+
 import java.util.HashMap;
 
 public class Check extends Roll {
@@ -18,6 +20,11 @@ public class Check extends Roll {
     @Override
     public Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    protected int resolveBonus(Creature creature) {
+        return creature.provide(skill.ability()).modifier() + creature.getProficiency(this);
     }
 
     @Override

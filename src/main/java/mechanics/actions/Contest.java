@@ -2,6 +2,7 @@ package mechanics.actions;
 
 import game.entities.Ability;
 import game.entities.Creature;
+import mechanics.RollMode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,13 +15,19 @@ public class Contest extends Roll {
         this.sourceSkill = builder.sourceCheck;
         this.targetOptions = builder.targetOptions;
     }
-    public int getSourceBonus(Creature source) {
-        return source.provide(sourceSkill.ability()).modifier() +
-                source.getProficiency(sourceSkill);
-    }
     @Override
     public Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public int execute(Creature source, RollMode mode) {
+        return rollWith(mode) + resolveBonus(source);
+    }
+
+    @Override
+    protected int resolveBonus(Creature source) {
+        return source.getProficiency(this) + source.provide(sourceSkill.ability()).modifier();
     }
 
     @Override

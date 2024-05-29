@@ -1,5 +1,6 @@
 package mechanics.actions;
 
+import game.entities.Creature;
 import mechanics.Construct;
 import game.entities.Ability;
 
@@ -20,6 +21,11 @@ public class Save extends Roll implements Construct {
     }
     public Ability.Type ability() {
         return super.getAbilityOptions().iterator().next();
+    }
+
+    @Override
+    protected int resolveBonus(Creature creature) {
+        return creature.provide(ability()).modifier() + creature.getProficiency(this);
     }
 
     @Override

@@ -1,7 +1,7 @@
 # DND Sim
 
 An attempt to parse the complex rules of DND into a repository \
-using Java Design Patterns and Object Oriented Programming.
+using Java Design Patterns and Object-Oriented Programming.
 
 ## Design Patterns
 - Singleton

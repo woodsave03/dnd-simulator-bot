@@ -32,34 +32,35 @@ public class RollCommand {
         if (requireSource && source == null)
             throw new IllegalStateException("Source is required");
         this.target = target;
-        int bonus, dc;
+        Creature creature;
+        int dc;
         boolean setToTarget;
         RollMode mode = RollMode.STRAIGHT;
         if (roll instanceof Attack attack) {
             dc = targetValue = target.getArmorClass();
-            bonus = source.getBonus(attack);
+            creature = source;
             setToTarget = false;
         } else if (roll instanceof Save save) {
             if (sourceAbility.isEmpty())
                 throw new IllegalStateException("Save must have a source ability");
             dc = sourceValue = getDC();
-            bonus = target.getBonus(save);
+            creature = target;
             setToTarget = true;
         } else if (roll instanceof Check check) {
             if (setDC.isEmpty())
                 throw new IllegalStateException("Check must have a set DC");
             dc = sourceValue = getDC();
-            bonus = target.getBonus(check);
+            creature = target;
             setToTarget = true;
         } else if (roll instanceof Contest contest) {
             dc = targetValue = target.check(target.resolveSkills(contest.getSkillOptions().iterator()), mode);
-            bonus = contest.getSourceBonus(source);
+            creature = source;
             setToTarget = false;
         } else {
             throw new IllegalArgumentException("Roll type not recognized");
         }
         sent = true;
-        Pair<Boolean, Integer> result = roll.success(dc, bonus, mode);
+        Pair<Boolean, Integer> result = roll.success(dc, creature, mode);
         success = result.key();
         if (setToTarget)
             targetValue = result.value();

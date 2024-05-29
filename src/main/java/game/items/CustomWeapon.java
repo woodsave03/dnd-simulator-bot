@@ -1,7 +1,5 @@
 package game.items;
 
-import game.entities.Ability;
-import mechanics.actions.MeleeAttack;
 import mechanics.actions.Range;
 import mechanics.dice.Damage;
 
@@ -9,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class CustomWeapon extends BaseWeapon {
 
