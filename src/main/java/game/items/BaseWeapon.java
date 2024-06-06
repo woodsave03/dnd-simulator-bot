@@ -8,6 +8,7 @@ import game.entities.Ability;
 import mechanics.Construct;
 import mechanics.Constructor;
 import mechanics.actions.Attack;
+import mechanics.dice.Constant;
 import mechanics.dice.Damage;
 import mechanics.actions.Roll;
 import mechanics.actions.Range;
@@ -25,9 +26,10 @@ public class BaseWeapon implements Construct {
     protected static final String SAVE = "save";
     private CoinComposite cost;
     private double weight;
-    private Range range;
+    protected Range range;
     private final SortedSet<Weapon.Property> properties;
     private HashMap<String, Roll> rolls;
+    private BaseWeapon.Type type;
 
 
     protected BaseWeapon(Builder builder, Range range) {
@@ -36,11 +38,19 @@ public class BaseWeapon implements Construct {
         this.weight = builder.weight;
         this.properties = builder.properties;
         this.rolls = builder.rolls;
+        this.type = builder.type;
     }
 
     @Override
-    public Constructor builder() {
-        return new Builder();
+    public Constructor deconstruct() {
+        if (range.isRanged()) {
+            return new Builder().with(this.range.getShortRange(), this.range.getLongRange())
+                    .with(type);
+        } else if (range.getShortRange() > 1) {
+            return new Builder().reach().with(type);
+        } else {
+            return new Builder().simpleMelee().with(type);
+        }
     }
 
     @Override
@@ -103,6 +113,14 @@ public class BaseWeapon implements Construct {
 
     public void setRolls(HashMap<String, Roll> rolls) {
         this.rolls = rolls;
+    }
+
+    public Damage getBaseDamage() {
+        if (rolls.containsKey(BASE_ATTACK))
+            return ((Attack) rolls.get(BASE_ATTACK)).getDamage();
+        else if (rolls.containsKey(RANGED_ATTACK))
+            return ((Attack) rolls.get(RANGED_ATTACK)).getDamage();
+        return new Damage.Builder().with("0").with(Damage.Type.BLUDGEONING).build();
     }
 
     public Resolvable<Ability.Type> getAbilityResolvable() {
@@ -271,8 +289,8 @@ public class BaseWeapon implements Construct {
         private double weight;
         private CoinComposite cost;
         private boolean rangeSet = false;
-        private Weapon.Group group;
-        private String name;
+        protected Weapon.Group group;
+        protected String name;
         private Set<Ability.Type> abilities = new HashSet<>();
 
 

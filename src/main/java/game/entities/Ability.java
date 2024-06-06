@@ -4,11 +4,12 @@ import communication.Attribute;
 import communication.AttributeType;
 import communication.Source;
 
-public class Ability extends Attribute<Ability.Type> {
+public class Ability implements Attribute<Ability.Type> {
     private int value;
     private int modifier;
+    private final Ability.Type type;
     public Ability(Type type, int value) {
-        super(type);
+        this.type = type;
         this.value = value;
         this.modifier = (value - 10) / 2;
     }
@@ -20,6 +21,17 @@ public class Ability extends Attribute<Ability.Type> {
     public int modifier() {
         return modifier;
     }
+
+    @Override
+    public boolean over(Attribute<Type> other) {
+        return compareTo(other) > 0;
+    }
+
+    @Override
+    public Type type() {
+        return type;
+    }
+
     @Override
     public int compareTo(Object o) {
         if (o instanceof Ability ability) {
@@ -56,7 +68,7 @@ public class Ability extends Attribute<Ability.Type> {
         }
 
         @Override
-        public Attribute<AttributeType> retrieve(Source<AttributeType> source) {
+        public Attribute<AttributeType> retrieveFrom(Source<AttributeType> source) {
             return source.provide(this);
         }
     }

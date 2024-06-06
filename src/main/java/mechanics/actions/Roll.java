@@ -29,17 +29,19 @@ public abstract class Roll implements Rollable, Construct, Serializable {
     // The set of abilities that can be used for the roll
     private Set<Ability.Type> abilityOptions;
     // The type of roll that is being made
-    private Type rollType;
+    private final Type rollType;
 
     /**
      * Constructor for a new Roll object with the given ability options and type.
      *
      * @param builder The builder object used to create the Roll object
-     * @param type The type of roll that is being made
      */
-    public Roll(Builder builder, Type type) {
+    public Roll(Builder builder) {
         this.abilityOptions = builder.abilities;
-        this.rollType = type;
+        this.rollType = builder.type;
+        if (this.rollType == null) {
+            throw new IllegalArgumentException("Roll type cannot be null");
+        }
     }
 
     /**
@@ -149,15 +151,6 @@ public abstract class Roll implements Rollable, Construct, Serializable {
     }
 
     /**
-     * Sets the type of roll that is being made to the given type.
-     *
-     * @param rollType The type of roll to set for the roll
-     */
-    public void setRollType(Type rollType) {
-        this.rollType = rollType;
-    }
-
-    /**
      * Returns a readable string representation of the roll.
      *
      * @return A string representation of the roll
@@ -202,11 +195,28 @@ public abstract class Roll implements Rollable, Construct, Serializable {
     }
 
     /**
+     * Returns a Builder object containing the information of the Roll object.
+     *
+     * @return A Builder object containing the information of the Roll object
+     */
+    @Override
+    public Constructor deconstruct() {
+        return new Builder() {
+            @Override
+            public Roll build() {
+                return Roll.this;
+            }
+        }.with(abilityOptions).with(rollType);
+    }
+
+    /**
      * The Constructor class of the Roll Object as per the Builder Pattern
      */
     public static abstract class Builder implements Constructor {
         // The set of abilities that can be used for the roll
         protected Set<Ability.Type> abilities = new HashSet<>();
+        // The type of roll that is being made
+        protected Type type;
 
         /**
          * Adds the given set of abilities to the roll.
@@ -228,6 +238,17 @@ public abstract class Roll implements Rollable, Construct, Serializable {
          */
         public Builder with(Ability.Type type) {
             this.abilities.add(type);
+            return this;
+        }
+
+        /**
+         * Adds the given type to the roll.
+         *
+         * @param type The type to add to the roll
+         * @return The builder object with the added type
+         */
+        public Builder with(Type type) {
+            this.type = type;
             return this;
         }
     }

@@ -76,7 +76,7 @@ public class RollTests {
         Assertions.assertEquals("Check: ACROBATICS (Dexterity) (DC 10)", command.display());
         System.out.println(command.sendTo(creature2));
 
-        command = new RollCommand(save).withAbility(Ability.Type.CON).attach(creature1);
+        command = new RollCommand(save).attach(creature1);
         Assertions.assertEquals("Save: Constitution (NON_MAGICAL) (DC 11)", command.display());
         System.out.println(command.sendTo(creature2));
 

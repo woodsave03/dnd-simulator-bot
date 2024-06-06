@@ -37,7 +37,7 @@ public class Attack extends Roll {
      * @param builder the Builder object to use
      */
     public Attack(Builder builder) {
-        super(builder, Type.ATTACK);
+        super(builder);
         this.damage = builder.damage;
         this.title = builder.title;
         this.group = builder.group;
@@ -70,7 +70,7 @@ public class Attack extends Roll {
      */
     public Ability.Type resolveType(Creature creature) {
         Resolvable<Ability.Type> resolvable = new Resolvable<>(getAbilityOptions());
-        return creature.resolve(resolvable.options()).type();
+        return creature.abilities().resolve(resolvable.options()).type();
     }
 
     /**
@@ -148,7 +148,7 @@ public class Attack extends Roll {
 
     @Override
     protected int resolveBonus(Creature creature) {
-        return creature.getProficiency(this) + creature.provide(resolveType(creature)).modifier();
+        return creature.getProficiency(this) + creature.abilities().provide(resolveType(creature)).modifier();
     }
 
     /**
@@ -158,7 +158,20 @@ public class Attack extends Roll {
      */
     @Override
     public String display() {
-        return title + " (" + damage.display() + ")";
+        StringBuilder sb = new StringBuilder();
+        boolean ranged = range.isRanged();
+        if (ranged) {
+            sb.append("Ranged ");
+        } else {
+            sb.append("Melee ");
+        }
+        sb.append("Attack: ").append(title
+                ).append(" (").append(damage.display()).append(")");
+        if (ranged) {
+            sb.append(" (").append(range.getShortRange()).append("/")
+                    .append(range.getLongRange()).append(")");
+        }
+        return sb.toString();
     }
 
     /**
@@ -181,9 +194,17 @@ public class Attack extends Roll {
         return range.rollMode(distance);
     }
 
+    /**
+     * Deconstructs the Attack into a Builder object.
+     * @return a Builder object with the same parameters as the Attack
+     */
     @Override
-    public Constructor builder() {
-        return new Builder();
+    public Constructor deconstruct() {
+        return ((Builder) super.deconstruct())
+                .with(damage)
+                .as(title)
+                .with(group)
+                .with(range.getShortRange(), range.getLongRange());
     }
 
     /**
@@ -278,6 +299,7 @@ public class Attack extends Roll {
          */
         @Override
         public Attack build() {
+            super.with(Type.ATTACK);
             return new Attack(this);
         }
     }

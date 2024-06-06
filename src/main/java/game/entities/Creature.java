@@ -10,7 +10,7 @@ import communication.Source;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Creature extends Entity implements Source<Ability.Type> {
+public class Creature extends Entity implements Source<Skill> {
     private String name;
     private AbilityContour abilities;
     private int proficiencyBonus = 2;
@@ -33,27 +33,7 @@ public class Creature extends Entity implements Source<Ability.Type> {
         return abilities;
     }
 
-    @Override
-    public Attribute<Ability.Type> resolve(Iterator<Ability.Type> options) {
-        Ability.Type type = options.next();
-        while (options.hasNext()) {
-            Ability.Type next = options.next();
-            if (abilities.get(type).compareTo(abilities.get(next)) < 0) {
-                type = next;
-            }
-        }
-        return abilities.get(type);
-    }
 
-    @Override
-    public Ability.Type type(Iterator<Ability.Type> options) {
-        return resolve(options).type();
-    }
-
-    @Override
-    public Ability provide(Ability.Type type) {
-        return abilities.get(type);
-    }
 
     public int getArmorClass() {
         return ac;
@@ -64,7 +44,7 @@ public class Creature extends Entity implements Source<Ability.Type> {
     }
 
     public int getDC(Ability.Type type) {
-        return 8 + provide(type).modifier() + proficiencyBonus;
+        return 8 + abilities.provide(type).modifier() + proficiencyBonus;
     }
 
     public int make(Roll roll, RollMode mode) {
@@ -73,21 +53,6 @@ public class Creature extends Entity implements Source<Ability.Type> {
 
     public int check(Skill skill, RollMode mode) {
         return make(new Check.Builder().with(skill).build(), mode);
-    }
-
-    public Skill resolveSkills(Iterator<Skill> skills) {
-        Skill best = skills.next();
-        while (skills.hasNext()) {
-            Skill next = skills.next();
-            int bestBonus = provide(best.ability()).modifier()
-                    + Proficiency.bonus(this.skills.get(best), proficiencyBonus);
-            int nextBonus = provide(next.ability()).modifier()
-                    + Proficiency.bonus(this.skills.get(next), proficiencyBonus);
-            if (nextBonus > bestBonus) {
-                best = next;
-            }
-        }
-        return best;
     }
 
     public Creature addSkill(Skill skill, Proficiency proficiency) {
@@ -108,7 +73,7 @@ public class Creature extends Entity implements Source<Ability.Type> {
     public int getBonus(Roll roll) {
         if (roll instanceof Contest)
             throw new IllegalArgumentException("Contest rolls need clarification for bonus.");
-        return ((Ability) resolve(roll.getAbilityOptions().iterator())).modifier() +
+        return ((Ability) abilities().resolve(roll.getAbilityOptions().iterator())).modifier() +
                 getProficiency(roll);
     }
 
@@ -143,6 +108,29 @@ public class Creature extends Entity implements Source<Ability.Type> {
         } else {
             throw new IllegalArgumentException("Roll type: " + roll.getClass().getName() + " not supported");
         }
+    }
+
+    @Override
+    public ConcreteCheck resolve(Iterator<Skill> options) {
+        ConcreteCheck result = (new ConcreteCheck.Builder().with(options.next()).with(this)).build();
+        while (options.hasNext()) {
+            ConcreteCheck nextCheck = (new ConcreteCheck.Builder().with(options.next()).with(this))
+                    .build();
+            if (nextCheck.over(result)) {
+                result = nextCheck;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public ConcreteCheck provide(Skill type) {
+        return (new ConcreteCheck.Builder().with(type).with(this)).build();
+    }
+
+    @Override
+    public Skill type(Iterator<Skill> options) {
+        return resolve(options).type();
     }
 
     public enum Type {

@@ -21,16 +21,16 @@ public class CommsTest {
     }
     @Test
     public void testAbilityResolvable() {
-        Assertions.assertEquals(Ability.Type.STR, abilityResolvable.resolve(creature).type());
+        Assertions.assertEquals(Ability.Type.STR, abilityResolvable.resolve(creature.abilities()).type());
     }
 
     @Test
     public void testAbilitySource() {
-        Assertions.assertEquals(Ability.Type.STR, creature.type(abilityResolvable.options()));
+        Assertions.assertEquals(Ability.Type.STR, creature.abilities().type(abilityResolvable.options()));
     }
 
     @Test
     public void testSourceProvide() {
-        Assertions.assertEquals(15, creature.provide(Ability.Type.STR).score());
+        Assertions.assertEquals(15, creature.abilities().provide(Ability.Type.STR).score());
     }
 }

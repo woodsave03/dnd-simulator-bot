@@ -1,9 +1,11 @@
 package game.entities;
 
+import communication.Source;
+
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class AbilityContour {
+public class AbilityContour implements Source<Ability.Type> {
     private final Ability[] abilities = new Ability[6];
 
     public AbilityContour() {
@@ -34,5 +36,28 @@ public class AbilityContour {
 
     public Ability get(Ability.Type ability) {
         return abilities[ability.ordinal()];
+    }
+
+
+    @Override
+    public Ability resolve(Iterator<Ability.Type> options) {
+        Ability.Type result = options.next();
+        while (options.hasNext()) {
+            Ability.Type next = options.next();
+            if (score(next) > score(result)) {
+                result = next;
+            }
+        }
+        return provide(result);
+    }
+
+    @Override
+    public Ability provide(Ability.Type type) {
+        return get(type);
+    }
+
+    @Override
+    public Ability.Type type(Iterator<Ability.Type> options) {
+        return resolve(options).type();
     }
 }

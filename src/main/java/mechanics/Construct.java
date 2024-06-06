@@ -8,5 +8,5 @@ package mechanics;
  * @see Constructor
  */
 public interface Construct {
-    Constructor builder();
+    Constructor deconstruct();
 }

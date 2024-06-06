@@ -22,7 +22,7 @@ public class Sequence extends DiceComposite implements Construct {
             if (die instanceof Sequence sequence)
                 builder.with(sequence.copy());
             else if (die instanceof Constant constant)
-                builder.with(constant.copy());
+                builder.with(constant.rollAfter());
             else
                 builder.with(die);
         }
@@ -78,12 +78,12 @@ public class Sequence extends DiceComposite implements Construct {
     }
 
     @Override
-    public Builder builder() {
-        return new Builder();
+    public Builder deconstruct() {
+        return new Builder().with(getChildren()).with(rollAfter());
     }
     @Override
     public Sequence explode() {
-        Builder builder = builder();
+        Builder builder = new Builder();
         for (DiceComposite die : getChildren())
             builder.with(die.explode());
         return builder.with(rollAfter()).build();

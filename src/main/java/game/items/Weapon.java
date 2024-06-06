@@ -2,9 +2,6 @@ package game.items;
 
 import game.entities.Ability;
 import mechanics.actions.Attack;
-import mechanics.actions.MeleeAttack;
-import mechanics.actions.RangedAttack;
-import communication.Attribute;
 
 import java.util.*;
 
@@ -31,21 +28,6 @@ public class Weapon {
     public enum Property {
         RANGED, REACH, THROWN, VERSATILE, FINESSE, HEAVY, LIGHT, LOADING,
         SPECIAL, TWO_HANDED, AMMUNITION;
-
-
-        public static List<Attack.Builder> attacks(HashSet<Property> properties) {
-            LinkedList<Attack.Builder> attacks = new LinkedList<>();
-            if (properties.contains(RANGED))
-                attacks.add(new RangedAttack.Builder());
-            else {
-                attacks.add(new MeleeAttack.Builder());
-                if (properties.contains(VERSATILE))
-                    attacks.add(new MeleeAttack.Builder());
-                if (properties.contains(THROWN))
-                    attacks.add(new RangedAttack.Builder());
-            }
-            return attacks;
-        }
 
         public static SortedSet<Property> sort(List<Property> properties) {
             TreeSet<Property> sorted = new TreeSet<>();

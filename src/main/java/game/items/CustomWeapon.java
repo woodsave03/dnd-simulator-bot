@@ -9,18 +9,29 @@ import java.net.ProtocolException;
 import java.util.*;
 
 public class CustomWeapon extends BaseWeapon {
-
+    private final String name;
+    private final Weapon.Group group;
     private CustomWeapon(Builder builder, Range range) {
         super(builder, range);
+        this.name = builder.name;
+        this.group = builder.group;
     }
 
     @Override
-    public Builder builder() {
-        return new Builder();
+    public Builder deconstruct() {
+        Builder builder = new Builder();
+        if (range.isRanged()) {
+            builder = builder.with(range.getShortRange(), range.getLongRange());
+        } else if (range.isReach()) {
+            builder = builder.reach();
+        } else {
+            builder = builder.simpleMelee();
+        }
+        return builder.as(name).withWeight(getWeight()).withCost(getCost().getValue())
+                .with(getBaseDamage()).with(group).with(getProperties());
     }
 
     public static class Builder extends BaseWeapon.Builder {
-
         @Override
         public CustomWeapon build() {
             return new CustomWeapon(this, calculateRange());
@@ -29,6 +40,18 @@ public class CustomWeapon extends BaseWeapon {
         @Override
         public Builder with(int shortRange, int longRange) {
             super.with(shortRange, longRange);
+            return this;
+        }
+
+        @Override
+        public Builder reach() {
+            super.reach();
+            return this;
+        }
+
+        @Override
+        public Builder simpleMelee() {
+            super.simpleMelee();
             return this;
         }
 
@@ -65,6 +88,12 @@ public class CustomWeapon extends BaseWeapon {
             if (!Arrays.asList(properties).contains(Weapon.Property.RANGED))
                 addRoll(BaseWeapon.BASE_ATTACK);
             super.with(new TreeSet<>(Arrays.asList(properties)));
+            return this;
+        }
+
+        @Override
+        public Builder with(SortedSet<Weapon.Property> properties) {
+            super.with(properties);
             return this;
         }
 

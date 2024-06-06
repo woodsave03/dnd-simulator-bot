@@ -52,6 +52,15 @@ public class Range implements Serializable {
     }
 
     /**
+     * Returns whether the attack has reach.
+     *
+     * @return true if the attack has reach, false otherwise
+     */
+    public boolean isReach() {
+        return shortRange > 1;
+    }
+
+    /**
      * Returns whether the attack is a melee attack.
      *
      * @return true if the attack is melee, false otherwise
