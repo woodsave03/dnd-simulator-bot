@@ -1,20 +1,34 @@
 package mechanics.dice;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A die with a specified number of sides.
+ */
 public class Die extends DiceComposite {
     private int sides;
 
+    /**
+     * Default constructor for a 20-sided die.
+     * @see #Die(int)
+     */
     public Die() {
         this(20);
     }
 
+    /**
+     * Constructor for a die with a specified number of sides.
+     * @param sides the number of sides on the die
+     */
     private Die(int sides) {
         this.sides = sides;
     }
 
+    /**
+     * Get the type of the die.
+     * @return the type of the die
+     */
     public Type type() {
         return switch (sides) {
             case 4 -> Type.d4;
@@ -27,28 +41,53 @@ public class Die extends DiceComposite {
         };
     }
 
+    /**
+     * Explode the die into a die with a type one higher.
+     * @return a die with a type one higher
+     */
     @Override
     public Die explode() {
         return Factory.weigh(Type.explode(type()));
     }
 
+    /**
+     * Roll the die.
+     * @return a random number between 1 and the number of sides
+     */
     @Override
     public int roll() {
         return (int) (Math.random() * sides) + 1;
     }
+
+    /**
+     * Display the die in a readable format.
+     * @return the die in a readable format
+     */
     @Override
     public String display() {
         return "1d" + sides;
     }
 
+    /**
+     * Getter for the number of sides on the die.
+     * @return the number of sides on the die
+     */
     public int getSides() {
         return sides;
     }
 
+    /**
+     * Setter for the number of sides on the die.
+     * @param sides the number of sides on the die
+     */
     public void setSides(int sides) {
         this.sides = sides;
     }
 
+    /**
+     * Convert the die to JSON format.
+     * @return
+     */
     @Override
     public String toString() {
         return "Die{" +
@@ -56,6 +95,11 @@ public class Die extends DiceComposite {
                 '}';
     }
 
+    /**
+     * Check if the die is equal to another object.
+     * @param other the object to compare
+     * @return true if the die is equal to the other object
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof Die die)
@@ -63,6 +107,9 @@ public class Die extends DiceComposite {
         return false;
     }
 
+    /**
+     * The types of dice available.
+     */
     public enum Type {
         d20(20), d12(12), d10(10), d8(8), d6(6), d4(4);
 
@@ -87,6 +134,11 @@ public class Die extends DiceComposite {
             };
         }
 
+        /**
+         * Get the next die type higher than the given type.
+         * @param lower the die type to get the next type higher than
+         * @return the die type higher than the lower
+         */
         public static Type explode(Type lower) {
             // return the die type higher than the lower
             if (lower == d20)
@@ -96,9 +148,17 @@ public class Die extends DiceComposite {
         }
     }
 
+    /**
+     * Flyweight factory class for creating dice.
+     */
     public static class Factory {
         private static Map<Type, Die> dice = new HashMap<>();
 
+        /**
+         * Parse a dice notation string into a DiceComposite object.
+         * @param notation the dice notation string
+         * @return the DiceComposite object
+         */
         public static DiceComposite parse(String notation) {
             notation = notation.toLowerCase().trim();
 
@@ -126,6 +186,11 @@ public class Die extends DiceComposite {
             }
         }
 
+        /**
+         * Get a die of the specified type.
+         * @param type the type of die to get
+         * @return the die of the specified type
+         */
         private static Die weigh(Type type) {
             Die die = dice.get(type);
             if (die == null) {

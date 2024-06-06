@@ -6,17 +6,33 @@ import mechanics.dice.Damage;
 import java.io.File;
 import java.io.IOException;
 import java.net.ProtocolException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+/**
+ * CustomWeapon is a class that extends BaseWeapon and is used to create custom weapons.
+ */
 public class CustomWeapon extends BaseWeapon {
     private final String name;
     private final Weapon.Group group;
+
+    /**
+     * Builder for CustomWeapon
+     * @param builder Builder object
+     * @param range Range object
+     */
     private CustomWeapon(Builder builder, Range range) {
         super(builder, range);
         this.name = builder.name;
         this.group = builder.group;
     }
 
+    /**
+     * Deconstructs the CustomWeapon object into a Builder object
+     * @return Builder object with the same values as the CustomWeapon object
+     */
     @Override
     public Builder deconstruct() {
         Builder builder = new Builder();
@@ -31,6 +47,9 @@ public class CustomWeapon extends BaseWeapon {
                 .with(getBaseDamage()).with(group).with(getProperties());
     }
 
+    /**
+     * Builder class for CustomWeapon
+     */
     public static class Builder extends BaseWeapon.Builder {
         @Override
         public CustomWeapon build() {
@@ -97,6 +116,12 @@ public class CustomWeapon extends BaseWeapon {
             return this;
         }
 
+        /**
+         * Reads a weapon from a file
+         * @param filename Name of the file
+         * @return CustomWeapon object
+         * @throws ProtocolException If the file is not of type *.weapon
+         */
         public static CustomWeapon readFromFile(String filename) throws ProtocolException {
             CustomWeapon.Builder builder = new Builder();
             if (!filename.substring(filename.indexOf(".")).equals(".weapon"))

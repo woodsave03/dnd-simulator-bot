@@ -1,6 +1,5 @@
 package game.items;
 
-import com.sun.source.tree.Tree;
 import communication.Resolvable;
 import game.Coin;
 import game.CoinComposite;
@@ -8,7 +7,6 @@ import game.entities.Ability;
 import mechanics.Construct;
 import mechanics.Constructor;
 import mechanics.actions.Attack;
-import mechanics.dice.Constant;
 import mechanics.dice.Damage;
 import mechanics.actions.Roll;
 import mechanics.actions.Range;
@@ -16,8 +14,21 @@ import mechanics.actions.Save;
 import mechanics.dice.Die;
 import communication.Pair;
 
-import java.util.*;
+import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Arrays;
 
+/**
+ * BaseWeapon is a class that represents a weapon in the game. It contains all the necessary
+ * information to create a weapon object, including cost, weight, range, properties, and attack
+ * rolls. It is a Construct and can be deconstructed into a Builder object.
+ */
 public class BaseWeapon implements Construct {
     protected static final String BASE_ATTACK = "baseAttack";
     protected static final String VERSATILE_ATTACK = "versatileAttack";
@@ -31,7 +42,12 @@ public class BaseWeapon implements Construct {
     private HashMap<String, Roll> rolls;
     private BaseWeapon.Type type;
 
-
+    /**
+     * Constructor for BaseWeapon. It takes a Builder object and a Range object to create a new
+     * BaseWeapon object.
+     * @param builder Builder object containing all the necessary parameters
+     * @param range Range object containing the range of the weapon
+     */
     protected BaseWeapon(Builder builder, Range range) {
         this.range = range;
         this.cost = builder.cost;
@@ -41,6 +57,10 @@ public class BaseWeapon implements Construct {
         this.type = builder.type;
     }
 
+    /**
+     * Deconstructs the BaseWeapon object into a Builder object.
+     * @return Builder object containing all the necessary parameters
+     */
     @Override
     public Constructor deconstruct() {
         if (range.isRanged()) {
@@ -53,11 +73,20 @@ public class BaseWeapon implements Construct {
         }
     }
 
+    /**
+     * Returns a JSON representation of the BaseWeapon object.
+     * @return JSON representation of the BaseWeapon object
+     */
     @Override
     public String toString() {
         return "BaseWeapon{" + substring() + '}';
     }
 
+    /**
+     * Compares the BaseWeapon object to another object to determine if they are equal.
+     * @param o Object to compare to
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (o instanceof BaseWeapon baseWeapon) {
@@ -66,6 +95,10 @@ public class BaseWeapon implements Construct {
         return false;
     }
 
+    /**
+     * Returns a substring of the BaseWeapon object.
+     * @return Substring of the BaseWeapon object
+     */
     public String substring() {
         return "cost=" + cost +
                 ", weight=" + weight +
@@ -73,6 +106,8 @@ public class BaseWeapon implements Construct {
                 ", properties=" + properties +
                 ", rolls=" + rolls;
     }
+
+    // Getters and setters
 
     public CoinComposite getCost() {
         return cost;
@@ -115,6 +150,10 @@ public class BaseWeapon implements Construct {
         this.rolls = rolls;
     }
 
+    /**
+     * Returns the base damage of the weapon.
+     * @return Damage object representing the base damage of the weapon
+     */
     public Damage getBaseDamage() {
         if (rolls.containsKey(BASE_ATTACK))
             return ((Attack) rolls.get(BASE_ATTACK)).getDamage();
@@ -123,6 +162,10 @@ public class BaseWeapon implements Construct {
         return new Damage.Builder().with("0").with(Damage.Type.BLUDGEONING).build();
     }
 
+    /**
+     * Returns a Resolvable object containing the ability options for the weapon.
+     * @return Resolvable object containing the ability options for the weapon
+     */
     public Resolvable<Ability.Type> getAbilityResolvable() {
         return new Resolvable<Ability.Type>()
                 .addIf(Ability.Type.DEX, properties.contains(Weapon.Property.RANGED)
@@ -130,6 +173,9 @@ public class BaseWeapon implements Construct {
                 .addIf(Ability.Type.STR, !properties.contains(Weapon.Property.RANGED));
     }
 
+    /**
+     * Enum representing the different types of base weapons in the game.
+     */
     public enum Type {
         BOOMERANG(new Damage.Builder().with(Damage.Type.BLUDGEONING).with(Die.Factory.d4()).build(),
                 List.of(Weapon.Property.RANGED), 10, 1),
@@ -219,6 +265,13 @@ public class BaseWeapon implements Construct {
         private final int cost;
         private final double weight;
 
+        /**
+         * Constructor for Type enum. Accepts Damage, List of Weapon.Property, cost, and weight.
+         * @param damage Damage object representing the base damage of the weapon
+         * @param properties List of Weapon.Property representing the properties of the weapon
+         * @param cost Cost of the weapon
+         * @param weight Weight of the weapon
+         */
         Type(Damage damage, List<Weapon.Property> properties, int cost, double weight) {
             this.baseDamage = damage;
             this.properties = new TreeSet<>(properties);
@@ -226,6 +279,7 @@ public class BaseWeapon implements Construct {
             this.weight = weight;
         }
 
+        // Getters
         public Damage getBaseDamage() {
             return baseDamage;
         }
@@ -243,6 +297,10 @@ public class BaseWeapon implements Construct {
         }
     }
 
+    /**
+     * Flyweight factory class for BaseWeapon. Contains a map of weapons and a create method to create a new
+     * BaseWeapon object.
+     */
     public static class Factory {
         private static final Map<String, BaseWeapon> weapons = new HashMap<>();
 
@@ -261,6 +319,12 @@ public class BaseWeapon implements Construct {
             return weapon;
         }
 
+        /**
+         * Builds a new BaseWeapon object based on the name of the weapon.
+         * @param name Name of the weapon
+         * @return BaseWeapon object representing the weapon
+         * @throws IllegalArgumentException if the name is not a valid weapon name
+         */
         private static BaseWeapon build(String name) throws IllegalArgumentException {
             Type type = Type.valueOf(name.toUpperCase());
             Builder builder = new Builder();
@@ -279,6 +343,9 @@ public class BaseWeapon implements Construct {
         }
     }
 
+    /**
+     * Builder class for BaseWeapon. Contains all the necessary parameters to create a new BaseWeapon object.
+     */
     protected static class Builder implements Constructor {
         private SortedSet<Weapon.Property> properties;
         private Optional<Integer> reach = Optional.empty();
@@ -350,6 +417,9 @@ public class BaseWeapon implements Construct {
             rolls.put(rollName, result);
         }
 
+        /**
+         * Calculates the range of the weapon based on the reach and range properties.
+         */
         protected Range calculateRange() {
             return this.range.map(integerIntegerPair -> new Range(integerIntegerPair.key(), integerIntegerPair.value()))
                     .orElseGet(() -> reach.map(Range::new).orElseGet(() -> new Range(1)));
@@ -401,6 +471,11 @@ public class BaseWeapon implements Construct {
             return this;
         }
 
+        /**
+         * Allows the user to create a weapon simply by passing in the BaseWeapon type.
+         * @param type BaseWeapon type
+         * @return Builder object with the BaseWeapon type, ready to be built
+         */
         public Builder with(BaseWeapon.Type type) {
             this.type = type;
             this.group = Weapon.Group.of(type);
@@ -452,6 +527,11 @@ public class BaseWeapon implements Construct {
                     || properties.contains(Weapon.Property.THROWN);
         }
 
+        /**
+         * Determines if the weapon is not a melee weapon given the weapon properties.
+         * @param props Weapon properties
+         * @return true if the weapon is not a melee weapon, false otherwise
+         */
         public static boolean isNotMeleeRange(Weapon.Property... props) {
             Set<Weapon.Property> propertySet = new HashSet<Weapon.Property>(Arrays.asList(props));
             return propertySet.contains(Weapon.Property.REACH)

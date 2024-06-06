@@ -1,15 +1,11 @@
 package game.items;
 
-import mechanics.actions.Range;
 import mechanics.dice.Damage;
 import mechanics.dice.Die;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.net.ProtocolException;
-import java.util.function.Consumer;
 
 public class WeaponTests {
     @Test

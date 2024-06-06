@@ -95,4 +95,15 @@ public class DiceTests {
         System.out.println(damage.roll());
         Assertions.assertEquals("2d6 of SLASHING damage", damage.display());
     }
+
+    @Test
+    public void testExplode() {
+        Die d6 = Die.Factory.d6();
+        Die d6Explode = d6.explode();
+        Die d8 = Die.Factory.d8();
+        Assertions.assertEquals(d6Explode, d8);
+
+        System.out.println(d6Explode.display());
+        System.out.println(d6Explode.roll());
+    }
 }
