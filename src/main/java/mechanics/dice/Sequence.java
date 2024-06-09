@@ -69,9 +69,11 @@ public class Sequence extends DiceComposite implements Construct {
         // Append the constant if it exists
         if (rollAfter() > 0)
             sb.append(rollAfter());
-        else
+        else if (!sb.isEmpty())
             // Remove the trailing " + "
             sb.delete(sb.length() - 3, sb.length());
+        else
+            sb.append("0");
         return sb.toString();
     }
 

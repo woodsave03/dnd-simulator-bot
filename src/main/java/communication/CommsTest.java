@@ -3,10 +3,8 @@ package communication;
 import game.entities.Ability;
 import game.entities.AbilityContour;
 import game.entities.Creature;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

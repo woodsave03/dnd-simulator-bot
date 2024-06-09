@@ -5,4 +5,9 @@ package game.play;
  */
 public class ClassFeature {
     private String description;
+    private final int level;
+
+    public ClassFeature(int level) {
+        this.level = level;
+    }
 }

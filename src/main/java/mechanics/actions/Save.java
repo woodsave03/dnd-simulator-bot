@@ -64,7 +64,7 @@ public class Save extends Roll implements Construct {
      */
     @Override
     public String display() {
-        return "Save: " + ability() + " (" + descriptor + ")";
+        return ": " + ability() + " (" + descriptor + ")";
     }
 
     /**

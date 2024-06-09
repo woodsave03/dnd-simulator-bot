@@ -6,7 +6,7 @@ import game.CoinComposite;
 import game.entities.Ability;
 import mechanics.Construct;
 import mechanics.Constructor;
-import mechanics.actions.Attack;
+import mechanics.actions.WeaponAttack;
 import mechanics.dice.Damage;
 import mechanics.actions.Roll;
 import mechanics.actions.Range;
@@ -30,11 +30,11 @@ import java.util.Arrays;
  * rolls. It is a Construct and can be deconstructed into a Builder object.
  */
 public class BaseWeapon implements Construct {
-    protected static final String BASE_ATTACK = "baseAttack";
-    protected static final String VERSATILE_ATTACK = "versatileAttack";
-    protected static final String THROWN_ATTACK = "throwAttack";
-    protected static final String RANGED_ATTACK = "rangedAttack";
-    protected static final String SAVE = "save";
+    protected static final String BASE_ATTACK = "Base";
+    protected static final String VERSATILE_ATTACK = "Versatile";
+    protected static final String THROWN_ATTACK = "Thrown";
+    protected static final String RANGED_ATTACK = "Ranged";
+    protected static final String SAVE = "Save";
     private CoinComposite cost;
     private double weight;
     protected Range range;
@@ -107,6 +107,11 @@ public class BaseWeapon implements Construct {
                 ", rolls=" + rolls;
     }
 
+    public String display() {
+        return type.toString() + ": " + String.join(", ", rolls.keySet().stream()
+                .map(key -> key + rolls.get(key).display()).toArray(String[]::new));
+    }
+
     // Getters and setters
 
     public CoinComposite getCost() {
@@ -156,9 +161,9 @@ public class BaseWeapon implements Construct {
      */
     public Damage getBaseDamage() {
         if (rolls.containsKey(BASE_ATTACK))
-            return ((Attack) rolls.get(BASE_ATTACK)).getDamage();
+            return ((WeaponAttack) rolls.get(BASE_ATTACK)).getDamage();
         else if (rolls.containsKey(RANGED_ATTACK))
-            return ((Attack) rolls.get(RANGED_ATTACK)).getDamage();
+            return ((WeaponAttack) rolls.get(RANGED_ATTACK)).getDamage();
         return new Damage.Builder().with("0").with(Damage.Type.BLUDGEONING).build();
     }
 
@@ -382,14 +387,14 @@ public class BaseWeapon implements Construct {
             Roll result = null;
             switch (rollName) {
                 case BASE_ATTACK -> {
-                    Attack.Builder builder = new Attack.Builder().with(this.damage).as(this.name)
+                    WeaponAttack.Builder builder = new WeaponAttack.Builder().with(this.damage).as(this.name)
                             .with(abilities);
                     if (reach.isPresent())
                         builder = builder.with(2);
                     result = builder.with(group).build();
                 }
                 case RANGED_ATTACK -> {
-                    Attack.Builder builder = new Attack.Builder()
+                    WeaponAttack.Builder builder = new WeaponAttack.Builder()
                             .with(this.damage).as(this.name + " (Ranged)")
                             .with(abilities).with(group);
                     if (this.range.isPresent())
@@ -397,7 +402,7 @@ public class BaseWeapon implements Construct {
                     result = builder.build();
                 }
                 case VERSATILE_ATTACK -> {
-                    Attack.Builder builder = new Attack.Builder()
+                    WeaponAttack.Builder builder = new WeaponAttack.Builder()
                             .with(this.damage.explode()).as(this.name + " (Versatile)")
                             .with(abilities).with(group);
                     if (this.reach.isPresent())
@@ -405,7 +410,7 @@ public class BaseWeapon implements Construct {
                     result = builder.build();
                 }
                 case THROWN_ATTACK -> {
-                    Attack.Builder builder = new Attack.Builder()
+                    WeaponAttack.Builder builder = new WeaponAttack.Builder()
                             .with(this.damage).as(this.name + " (Thrown)")
                             .with(abilities).with(group);
                     if (this.range.isPresent())

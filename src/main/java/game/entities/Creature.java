@@ -143,7 +143,7 @@ public class Creature extends Entity implements Source<Skill> {
         Proficiency proficiency = switch (roll.getRollType()) {
             case CHECK -> skills.get(((Check) roll).getSkill());
             case SAVE -> saves.get(((Save) roll).ability());
-            case ATTACK -> weapons.get(((Attack) roll).getGroup());
+            case ATTACK -> weapons.get(((WeaponAttack) roll).getGroup());
             default -> throw new UnsupportedOperationException("Proficiency of roll type "
                     + roll.getRollType() + " not supported");
         };
@@ -163,7 +163,7 @@ public class Creature extends Entity implements Source<Skill> {
             return skills.containsKey(check.getSkill());
         } else if (roll instanceof Save save) {
             return saves.containsKey(save.getAbilityOptions().iterator().next());
-        } else if (roll instanceof Attack attack){
+        } else if (roll instanceof WeaponAttack attack){
             return weapons.containsKey(attack.getGroup());
         } else {
             throw new IllegalArgumentException("Roll type: " + roll.getClass().getName() + " not supported");

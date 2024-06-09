@@ -8,4 +8,5 @@ package game.entities;
  * Not implemented yet but will mainly be handling combat grid interactions.
  */
 public class Mediator {
+
 }

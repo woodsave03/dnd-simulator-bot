@@ -16,8 +16,8 @@ import java.util.Set;
 public class RollTests {
     private static Check check1, check2;
     private static Save save;
-    private static Attack rangedAttack;
-    private static Attack meleeAttack;
+    private static WeaponAttack rangedAttack;
+    private static WeaponAttack meleeAttack;
     private static Contest contest;
     private static Creature creature1, creature2;
 
@@ -28,7 +28,7 @@ public class RollTests {
         check2 = Check.Factory
                 .create(Skill.ACROBATICS);
         save = Save.Factory.create(Ability.Type.CON, Save.Descriptor.NON_MAGICAL);
-        rangedAttack = new Attack.Builder()
+        rangedAttack = new WeaponAttack.Builder()
                 .with(Ability.Type.DEX)
                 .with(20, 60)
                 .with(Weapon.Group.SIMPLE)
@@ -38,7 +38,7 @@ public class RollTests {
                         .build())
                 .as("Example Ranged Attack")
                 .build();
-        meleeAttack = new Attack.Builder()
+        meleeAttack = new WeaponAttack.Builder()
                 .with(Ability.Type.STR)
                 .with(2)
                 .with(Weapon.Group.MARTIAL)
@@ -64,6 +64,7 @@ public class RollTests {
         Assertions.assertThrows(IllegalStateException.class, () -> command.sendTo(creature1));
         command.withDC(dc);
         Assertions.assertDoesNotThrow(() -> command.sendTo(creature1));
+        System.out.println(command.report());
     }
 
     @Test
@@ -119,7 +120,7 @@ public class RollTests {
         Save newSave = Save.Factory.create(Ability.Type.CON, Save.Descriptor.NON_MAGICAL);
         Assertions.assertEquals(save, newSave);
 
-        Attack newRangedAttack = new Attack.Builder()
+        WeaponAttack newRangedAttack = new WeaponAttack.Builder()
                 .with(Ability.Type.DEX)
                 .with(20, 60)
                 .with(Weapon.Group.SIMPLE)
@@ -131,7 +132,7 @@ public class RollTests {
                 .build();
         Assertions.assertEquals(rangedAttack, newRangedAttack);
 
-        Attack newMeleeAttack = new Attack.Builder()
+        WeaponAttack newMeleeAttack = new WeaponAttack.Builder()
                 .with(Ability.Type.STR)
                 .with(2)
                 .with(Weapon.Group.MARTIAL)

@@ -71,7 +71,7 @@ public class RollCommand {
         int dc;
         boolean setToTarget;
         RollMode mode = RollMode.STRAIGHT;
-        if (roll instanceof Attack attack) {
+        if (roll instanceof WeaponAttack attack) {
             dc = targetValue = target.getArmorClass();
             creature = source;
             setToTarget = false;

@@ -10,7 +10,8 @@ import java.net.ProtocolException;
 public class WeaponTests {
     @Test
     public void testWeaponString() {
-        System.out.println(BaseWeapon.Factory.create("Dagger").toString());
+        System.out.println(BaseWeapon.Factory.create("Dagger").display());
+        System.out.println(BaseWeapon.Factory.create("Net").display());
     }
 
     @Test

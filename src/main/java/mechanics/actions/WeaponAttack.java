@@ -18,14 +18,9 @@ import java.util.Set;
  *
  * @implNote This class is not built to be used for spellcasting attacks. I suggest
  * making a new SpellAttack for this purpose.
- *
  * @see Roll
  */
-public class Attack extends Roll {
-    // The damage and damage type of the attack
-    private Damage damage;
-    // The title of the attack
-    private String title;
+public class WeaponAttack extends AttackRoll {
     // The weapon group of the attack
     private Weapon.Group group;
     // The range of the Attack
@@ -36,41 +31,10 @@ public class Attack extends Roll {
      *
      * @param builder the Builder object to use
      */
-    public Attack(Builder builder) {
+    public WeaponAttack(Builder builder) {
         super(builder);
-        this.damage = builder.damage;
-        this.title = builder.title;
         this.group = builder.group;
         this.range = builder.range;
-    }
-
-    /**
-     * Returns the title of the attack.
-     *
-     * @return the title of the attack
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Sets the title of the attack.
-     *
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Uses the communication system to resolve the ideal Ability.Type for the Attack.
-     *
-     * @param creature the Creature to resolve the Ability.Type for
-     * @return the resolved Ability.Type
-     */
-    public Ability.Type resolveType(Creature creature) {
-        Resolvable<Ability.Type> resolvable = new Resolvable<>(getAbilityOptions());
-        return creature.abilities().resolve(resolvable.options()).type();
     }
 
     /**
@@ -99,9 +63,8 @@ public class Attack extends Roll {
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Attack attack) {
-            return super.equals(attack) && attack.damage.equals(damage)
-                    && attack.title.equals(title) && attack.group.equals(group);
+        if (o instanceof WeaponAttack attack) {
+            return super.equals(attack) && attack.group.equals(group);
         }
         return false;
     }
@@ -125,26 +88,9 @@ public class Attack extends Roll {
      */
     @Override
     protected String substring() {
-        return super.substring() + ", damage=" + damage + ", title='" + title + "', group=" + group;
+        return super.substring() + ", group=" + group;
     }
 
-    /**
-     * Returns the damage object of the attack.
-     *
-     * @return the damage object of the attack
-     */
-    public Damage getDamage() {
-        return damage;
-    }
-
-    /**
-     * Sets the damage object of the attack.
-     *
-     * @param damage the damage object to set
-     */
-    public void setDamage(Damage damage) {
-        this.damage = damage;
-    }
 
     @Override
     protected int resolveBonus(Creature creature) {
@@ -159,17 +105,12 @@ public class Attack extends Roll {
     @Override
     public String display() {
         StringBuilder sb = new StringBuilder();
-        boolean ranged = range.isRanged();
-        if (ranged) {
-            sb.append("Ranged ");
-        } else {
-            sb.append("Melee ");
-        }
-        sb.append("Attack: ").append(title
-                ).append(" (").append(damage.display()).append(")");
-        if (ranged) {
+        sb.append(" Attack: ").append("(").append(getDamage().display()).append(")");
+        if (range.isRanged()) {
             sb.append(" (").append(range.getShortRange()).append("/")
                     .append(range.getLongRange()).append(")");
+        } else if (range.isReach()) {
+            sb.append(" (Reach)");
         }
         return sb.toString();
     }
@@ -196,13 +137,12 @@ public class Attack extends Roll {
 
     /**
      * Deconstructs the Attack into a Builder object.
+     *
      * @return a Builder object with the same parameters as the Attack
      */
     @Override
-    public Constructor deconstruct() {
+    public Builder deconstruct() {
         return ((Builder) super.deconstruct())
-                .with(damage)
-                .as(title)
                 .with(group)
                 .with(range.getShortRange(), range.getLongRange());
     }
@@ -212,13 +152,8 @@ public class Attack extends Roll {
      *
      * @see Roll.Builder
      */
-    public static class Builder extends Roll.Builder {
+    public static class Builder extends AttackRoll.Builder {
         // The default title of the attack
-        private static final String DEFAULT_TITLE = "Attack";
-        // The title of the attack
-        private String title = DEFAULT_TITLE;
-        // The damage object of the attack
-        protected Damage damage;
         // The weapon group of the attack
         private Weapon.Group group;
         private final Range range = new Range();
@@ -232,28 +167,6 @@ public class Attack extends Roll {
         @Override
         public Builder with(Ability.Type ability) {
             super.with(ability);
-            return this;
-        }
-
-        /**
-         * Sets the title of the attack.
-         *
-         * @param title the title to set
-         * @return the Builder object (as per Builder pattern)
-         */
-        public Builder as(String title) {
-            this.title = title;
-            return this;
-        }
-
-        /**
-         * Sets the damage object of the attack.
-         *
-         * @param damage the damage object to set
-         * @return the Builder object (as per Builder pattern)
-         */
-        public Builder with(Damage damage) {
-            this.damage = damage;
             return this;
         }
 
@@ -283,7 +196,7 @@ public class Attack extends Roll {
          * Sets the short and long range of the attack.
          *
          * @param shortRange the short range to set
-         * @param longRange the long range to set
+         * @param longRange  the long range to set
          * @return the Builder object (as per Builder pattern)
          */
         public Builder with(int shortRange, int longRange) {
@@ -298,9 +211,21 @@ public class Attack extends Roll {
          * @return the Attack object
          */
         @Override
-        public Attack build() {
+        public WeaponAttack build() {
             super.with(Type.ATTACK);
-            return new Attack(this);
+            return new WeaponAttack(this);
+        }
+
+        @Override
+        public Builder with(Damage damage) {
+            super.with(damage);
+            return this;
+        }
+
+        @Override
+        public Builder as(String title) {
+            super.as(title);
+            return this;
         }
     }
 }
