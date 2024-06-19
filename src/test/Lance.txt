@@ -1,0 +1,8 @@
+Lance
+Type: Martial Melee Weapon Cost: 10 gp Weight: 6 lbs
+Proficiency with a lance allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren't mounted.
+
+Name	Cost	Damage	Weight	Properties
+Lance	10 gp	1d12 piercing	6 lbs	Reach, Special

@@ -90,4 +90,8 @@ public class CoinComposite {
                 "coins=" + coins +
                 '}';
     }
+
+    public static CoinComposite of(List<Coin> coins) {
+        return new CoinComposite(coins);
+    }
 }

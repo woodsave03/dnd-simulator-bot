@@ -157,6 +157,8 @@ public abstract class Roll implements Rollable, Construct, Serializable {
      */
     public abstract String display();
 
+    public abstract String subDisplay();
+
     /**
      * Returns a JSON string representation of the roll.
      *
@@ -225,7 +227,6 @@ public abstract class Roll implements Rollable, Construct, Serializable {
          * @return The builder object with the added abilities
          */
         public Builder with(Set<Ability.Type> abilities) {
-            assert !abilities.isEmpty();
             this.abilities.addAll(abilities);
             return this;
         }

@@ -1,0 +1,6 @@
+Rapier
+Type: Martial Melee Weapon Cost: 25 gp Weight: 2 lbs
+Proficiency with a rapier allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Rapier	25 gp	1d8 piercing	2 lbs	Finesse

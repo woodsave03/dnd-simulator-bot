@@ -1,0 +1,7 @@
+Longbow
+Longbow
+Type: Martial Ranged Weapon Cost: 50 gp Weight: 2 lbs
+Proficiency with a longbow allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Longbow	50 gp	1d8 piercing	2 lbs	Ammunition, Heavy, (Range 150/600), Two-Handed

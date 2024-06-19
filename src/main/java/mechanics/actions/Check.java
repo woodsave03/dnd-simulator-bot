@@ -64,7 +64,12 @@ public class Check extends Roll {
      */
     @Override
     public String display() {
-        return "Check: " + skill.display();
+        return "Check" + subDisplay();
+    }
+
+    @Override
+    public String subDisplay() {
+        return ": " + skill.display();
     }
 
     /**

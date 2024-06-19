@@ -57,7 +57,7 @@ public class Range implements Serializable {
      * @return true if the attack has reach, false otherwise
      */
     public boolean isReach() {
-        return shortRange > 1;
+        return shortRange > 1 && !isRanged();
     }
 
     /**
@@ -149,6 +149,12 @@ public class Range implements Serializable {
             }
         }
         return RollMode.STRAIGHT;
+    }
+
+    public static Range parse(String notation) {
+        notation = notation.substring(notation.indexOf("(") + 1, notation.indexOf(")"));
+        String[] parts = notation.split("/");
+        return new Range(Integer.parseInt(parts[0]) / 5, Integer.parseInt(parts[1]) / 5);
     }
 
     /**

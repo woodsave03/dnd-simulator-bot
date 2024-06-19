@@ -1,0 +1,6 @@
+Shortsword
+Type: Martial Melee Weapon Cost: 10 gp Weight: 2 lbs
+Proficiency with a shortsword allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Shortsword	10 gp	1d6 piercing	2 lbs	Finesse, Light

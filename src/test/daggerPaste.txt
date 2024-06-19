@@ -1,0 +1,7 @@
+Dagger
+Dagger
+Type: Simple Melee Weapon Cost: 2 gp Weight: 1 lb
+Proficiency with a dagger allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Dagger	2 gp	1d4 piercing	1 lb	Finesse, Light, Thrown (range 20/60)

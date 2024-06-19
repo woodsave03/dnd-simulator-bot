@@ -1,0 +1,6 @@
+Crossbow, heavy
+Type: Martial Ranged Weapon Cost: 50 gp Weight: 18 lbs
+Proficiency with a heavy crossbow allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Crossbow, heavy	50 gp	1d10 piercing	18 lbs	Ammunition, Heavy, Loading, (Range 100/400), Two-Handed

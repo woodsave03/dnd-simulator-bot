@@ -36,7 +36,6 @@ public class RollTests {
                         .with(Die.Factory.d6())
                         .with(Damage.Type.PIERCING)
                         .build())
-                .as("Example Ranged Attack")
                 .build();
         meleeAttack = new WeaponAttack.Builder()
                 .with(Ability.Type.STR)
@@ -46,7 +45,6 @@ public class RollTests {
                         .with(Die.Factory.parse("2d6"))
                         .with(Damage.Type.SLASHING)
                         .build())
-                .as("Example Melee Attack")
                 .build();
         contest = new Contest.Builder()
                 .with(Skill.ATHLETICS)
@@ -82,12 +80,12 @@ public class RollTests {
         System.out.println(command.sendTo(creature2));
 
         command = new RollCommand(rangedAttack).attach(creature1);
-        Assertions.assertEquals("Ranged Attack: Example Ranged Attack (1d6 of PIERCING damage) (20/60) (+4)",
+        Assertions.assertEquals("Ranged Attack: (1d6 of PIERCING damage) (20/60) (+4)",
                 command.display());
         System.out.println(command.sendTo(creature2));
 
         command = new RollCommand(meleeAttack).attach(creature1);
-        Assertions.assertEquals("Melee Attack: Example Melee Attack (2d6 of SLASHING damage) (+2)",
+        Assertions.assertEquals("Melee Attack: (2d6 of SLASHING damage) (Reach) (+2)",
                 command.display());
         System.out.println(command.sendTo(creature2));
     }
@@ -128,7 +126,6 @@ public class RollTests {
                         .with(Die.Factory.d6())
                         .with(Damage.Type.PIERCING)
                         .build())
-                .as("Example Ranged Attack")
                 .build();
         Assertions.assertEquals(rangedAttack, newRangedAttack);
 
@@ -140,7 +137,6 @@ public class RollTests {
                         .with(Die.Factory.parse("2d6"))
                         .with(Damage.Type.SLASHING)
                         .build())
-                .as("Example Melee Attack")
                 .build();
         Assertions.assertEquals(meleeAttack, newMeleeAttack);
 

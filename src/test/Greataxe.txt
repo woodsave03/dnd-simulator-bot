@@ -1,0 +1,6 @@
+Greataxe
+Type: Martial Melee Weapon Cost: 30 gp Weight: 7 lbs
+Proficiency with a greataxe allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Greataxe	30 gp	1d12 slashing	7 lbs	Heavy, Two-Handed

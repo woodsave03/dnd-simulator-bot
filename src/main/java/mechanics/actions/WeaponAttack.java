@@ -103,7 +103,7 @@ public class WeaponAttack extends AttackRoll {
      * @return a String representation of the Attack
      */
     @Override
-    public String display() {
+    public String subDisplay() {
         StringBuilder sb = new StringBuilder();
         sb.append(" Attack: ").append("(").append(getDamage().display()).append(")");
         if (range.isRanged()) {
@@ -113,6 +113,15 @@ public class WeaponAttack extends AttackRoll {
             sb.append(" (Reach)");
         }
         return sb.toString();
+    }
+
+    @Override
+    public String display() {
+        if (range.isRanged()) {
+            return "Ranged" + subDisplay();
+        } else {
+            return "Melee" + subDisplay();
+        }
     }
 
     /**
@@ -219,12 +228,6 @@ public class WeaponAttack extends AttackRoll {
         @Override
         public Builder with(Damage damage) {
             super.with(damage);
-            return this;
-        }
-
-        @Override
-        public Builder as(String title) {
-            super.as(title);
             return this;
         }
     }

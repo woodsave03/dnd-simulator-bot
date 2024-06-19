@@ -1,0 +1,6 @@
+Scimitar
+Type: Martial Melee Weapon Cost: 25 gp Weight: 3 lbs
+Proficiency with a scimitar allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Scimitar	25 gp	1d6 slashing	3 lbs	Finesse, Light

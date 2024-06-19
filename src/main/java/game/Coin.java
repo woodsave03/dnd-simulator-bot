@@ -62,7 +62,7 @@ public class Coin {
          * @param total The total amount of money to be converted to change.
          * @return A list of coins that represent the change for the given total.
          */
-        public static List<Coin> change(int total) {
+        public static CoinComposite change(int total) {
             List<Coin> result = new LinkedList<>();
             int current = total;
             while (current != 0) {
@@ -80,7 +80,7 @@ public class Coin {
                 result.add(create(target));
                 current -= target.value;
             }
-            return result;
+            return CoinComposite.of(result);
         }
 
         /**

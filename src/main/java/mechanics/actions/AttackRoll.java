@@ -7,7 +7,6 @@ import mechanics.dice.Damage;
 
 public abstract class AttackRoll extends Roll {
     private Damage damage;
-    private String title;
 
     /**
      * Constructor for a new Roll object with the given ability options and type.
@@ -17,7 +16,6 @@ public abstract class AttackRoll extends Roll {
     public AttackRoll(Builder builder) {
         super(builder);
         this.damage = builder.damage;
-        this.title = builder.title;
     }
 
     /**
@@ -49,28 +47,9 @@ public abstract class AttackRoll extends Roll {
         this.damage = damage;
     }
 
-    /**
-     * Returns the title of the attack.
-     *
-     * @return the title of the attack
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Sets the title of the attack.
-     *
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
     @Override
     protected String substring() {
-        return super.substring() + ", damage=" + getDamage() + ", title='" + title;
+        return super.substring() + ", damage=" + getDamage();
     }
 
     /**
@@ -82,8 +61,7 @@ public abstract class AttackRoll extends Roll {
     @Override
     public boolean equals(Object o) {
         if (o instanceof AttackRoll attack) {
-            return super.equals(attack) && attack.damage.equals(damage)
-                    && attack.title.equals(title);
+            return super.equals(attack) && attack.damage.equals(damage);
         }
         return false;
     }
@@ -91,15 +69,11 @@ public abstract class AttackRoll extends Roll {
     @Override
     public Builder deconstruct() {
         return ((Builder) super.deconstruct())
-                .with(getDamage())
-                .as(title);
+                .with(getDamage());
     }
 
     public static abstract class Builder extends Roll.Builder {
-        private static final String DEFAULT_TITLE = "Attack";
-
         private Damage damage;
-        private String title = DEFAULT_TITLE;
 
         @Override
         public Builder with(Ability.Type type) {
@@ -115,18 +89,6 @@ public abstract class AttackRoll extends Roll {
          */
         public Builder with(Damage damage) {
             this.damage = damage;
-            return this;
-        }
-
-
-        /**
-         * Sets the title of the attack.
-         *
-         * @param title the title to set
-         * @return the Builder object
-         */
-        public Builder as(String title) {
-            this.title = title;
             return this;
         }
     }

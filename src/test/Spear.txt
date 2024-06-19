@@ -1,0 +1,6 @@
+Spear
+Type: Simple Melee Weapon Cost: 1 gp Weight: 3 lbs
+Proficiency with a spear allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Spear	1 gp	1d6 piercing	3 lbs	Thrown (range 20/60), Versatile (1d8)

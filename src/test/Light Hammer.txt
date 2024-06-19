@@ -1,0 +1,6 @@
+Light Hammer
+Type: Simple Melee Weapon Cost: 2 gp Weight: 2 lbs
+Proficiency with a light hammer allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Light Hammer	2 gp	1d4 bludgeoning	2 lbs	Light, Thrown (range 20/60)

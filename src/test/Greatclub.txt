@@ -1,0 +1,6 @@
+Greatclub
+Type: Simple Melee Weapon Cost: 2 sp Weight: 10 lbs
+Proficiency with a greatclub allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Greatclub	2 sp	1d8 bludgeoning	10 lbs	Two-Handed

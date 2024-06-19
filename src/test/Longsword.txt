@@ -1,0 +1,6 @@
+Longsword
+Type: Martial Melee Weapon Cost: 15 gp Weight: 3 lbs
+Proficiency with a longsword allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Longsword	15 gp	1d8 slashing	3 lbs	Versatile (1d10)

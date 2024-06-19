@@ -1,12 +1,14 @@
 package game.play;
 
+
 import java.util.Queue;
 
 /**
  * Class representing the different playable character classes in D&D 5e.
  */
 public class PlayerClass {
-    private Queue<ClassFeature> features;
+    private BaseFeature baseFeature;
+    private Queue<ClassFeatureComposite> features;
 
     /**
      * Enumeration of the different character classes in D&D 5e.

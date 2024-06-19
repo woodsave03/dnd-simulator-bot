@@ -1,6 +1,8 @@
 package mechanics.dice;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a damage roll in D&D 5e.
@@ -43,6 +45,35 @@ public class Damage extends Sequence {
     public int roll() {
         // TODO: If this is for crits, then it's doing it wrong. It is adding the bonus twice, not the dice roll.
         return twice ? super.roll() + super.roll() : super.roll();
+    }
+
+    @Override
+    public Set<Integer> getSides() {
+        Set<Integer> sides = new HashSet<>();
+        for (DiceComposite composite : getChildren()) {
+            if (composite instanceof Die die) {
+                sides.add(die.getSides());
+            } else if (composite instanceof Sequence sequence) {
+                sides.addAll(sequence.getSides());
+            }
+        }
+        return sides;
+    }
+
+    @Override
+    public int dieCount() {
+        int count = 0;
+        for (DiceComposite composite : getChildren()) {
+            if (composite instanceof Sequence sequence)
+                count += sequence.dieCount();
+            else if (composite instanceof Die)
+                count++;
+        }
+        return count;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     /**
@@ -119,6 +150,13 @@ public class Damage extends Sequence {
     @Override
     public Builder deconstruct() {
         return ((Builder) super.deconstruct()).with(type);
+    }
+
+    public static Damage parse(String damageNotation) {
+        Type type = Type.valueOf(damageNotation.substring(damageNotation.lastIndexOf(' ') + 1)
+                .toUpperCase());
+        String diceNotation = damageNotation.substring(0, damageNotation.lastIndexOf(' '));
+        return new Builder().with(Die.Factory.parse(diceNotation)).with(type).build();
     }
 
     /**

@@ -1,6 +1,7 @@
 package game.entities;
 
 import game.items.Weapon;
+import game.play.ClassFeatureComposite;
 import mechanics.Proficiency;
 import mechanics.RollMode;
 import mechanics.actions.*;
@@ -8,6 +9,7 @@ import communication.Source;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 
 /**
  * A creature is an entity that can be interacted with in the game. It has abilities, skills, and
@@ -21,6 +23,9 @@ public class Creature extends Entity implements Source<Skill> {
     private final HashMap<Ability.Type, Proficiency> saves = new HashMap<>();
     private final HashMap<Weapon.Group, Proficiency> weapons = new HashMap<>();
     private int ac;
+    private PriorityQueue<ClassFeatureComposite> features;
+    private int speed;
+    private float currentSpeed;
 
     /**
      * Constructs a creature with the given abilities, armor class, and name.
@@ -168,6 +173,19 @@ public class Creature extends Entity implements Source<Skill> {
         } else {
             throw new IllegalArgumentException("Roll type: " + roll.getClass().getName() + " not supported");
         }
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void addTemporarySpeed(int speed, Duration duration) {
+        this.currentSpeed = speed;
+        //TODO resolve duration
+    }
+
+    public void resolveAttack() {
+        //TODO resolve attack
     }
 
     /**

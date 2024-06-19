@@ -1,0 +1,6 @@
+Sickle
+Type: Simple Melee Weapon Cost: 1 gp Weight: 2 lbs
+Proficiency with a sickle allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Sickle	1 gp	1d4 slashing	2 lbs	Light

@@ -1,0 +1,6 @@
+Sling
+Type: Simple Ranged Weapon Cost: 1 sp Weight: --
+Proficiency with a sling allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Sling	1 sp	1d4 bludgeoning	--	Ammunition, (Range 30/120)

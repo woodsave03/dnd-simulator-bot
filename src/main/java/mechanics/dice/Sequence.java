@@ -3,8 +3,10 @@ package mechanics.dice;
 import mechanics.Construct;
 import mechanics.Constructor;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A Sequence is a collection of Dice and Constants that are rolled together.
@@ -75,6 +77,29 @@ public class Sequence extends DiceComposite implements Construct {
         else
             sb.append("0");
         return sb.toString();
+    }
+
+    public Set<Integer> getSides() {
+        Set<Integer> sides = new HashSet<>();
+        for (DiceComposite composite : getChildren()) {
+            if (composite instanceof Die die) {
+                sides.add(die.getSides());
+            } else if (composite instanceof Sequence sequence) {
+                sides.addAll(sequence.getSides());
+            }
+        }
+        return sides;
+    }
+
+    public int dieCount() {
+        int count = 0;
+        for (DiceComposite composite : getChildren()) {
+            if (composite instanceof Die)
+                count++;
+            else if (composite instanceof Sequence sequence)
+                count += sequence.dieCount();
+        }
+        return count;
     }
 
     /**

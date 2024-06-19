@@ -1,0 +1,6 @@
+Dart
+Type: Simple Ranged Weapon Cost: 5 cp Weight: 1/4 lb
+Proficiency with a dart allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Dart	5 cp	1d4 piercing	1/4 lb	Finesse, Thrown (range 20/60)

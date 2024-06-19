@@ -14,29 +14,22 @@ import mechanics.actions.Save;
 import mechanics.dice.Die;
 import communication.Pair;
 
-import java.util.TreeSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+import java.net.ProtocolException;
+import java.util.*;
 
 /**
  * BaseWeapon is a class that represents a weapon in the game. It contains all the necessary
  * information to create a weapon object, including cost, weight, range, properties, and attack
  * rolls. It is a Construct and can be deconstructed into a Builder object.
  */
-public class BaseWeapon implements Construct {
+public class BaseWeapon extends Item implements Construct {
     protected static final String BASE_ATTACK = "Base";
     protected static final String VERSATILE_ATTACK = "Versatile";
     protected static final String THROWN_ATTACK = "Thrown";
     protected static final String RANGED_ATTACK = "Ranged";
     protected static final String SAVE = "Save";
-    private CoinComposite cost;
-    private double weight;
     protected Range range;
     private final SortedSet<Weapon.Property> properties;
     private HashMap<String, Roll> rolls;
@@ -46,12 +39,10 @@ public class BaseWeapon implements Construct {
      * Constructor for BaseWeapon. It takes a Builder object and a Range object to create a new
      * BaseWeapon object.
      * @param builder Builder object containing all the necessary parameters
-     * @param range Range object containing the range of the weapon
      */
-    protected BaseWeapon(Builder builder, Range range) {
-        this.range = range;
-        this.cost = builder.cost;
-        this.weight = builder.weight;
+    protected BaseWeapon(Builder builder) {
+        super(builder);
+        this.range = builder.range;
         this.properties = builder.properties;
         this.rolls = builder.rolls;
         this.type = builder.type;
@@ -62,7 +53,7 @@ public class BaseWeapon implements Construct {
      * @return Builder object containing all the necessary parameters
      */
     @Override
-    public Constructor deconstruct() {
+    public Builder deconstruct() {
         if (range.isRanged()) {
             return new Builder().with(this.range.getShortRange(), this.range.getLongRange())
                     .with(type);
@@ -99,36 +90,19 @@ public class BaseWeapon implements Construct {
      * Returns a substring of the BaseWeapon object.
      * @return Substring of the BaseWeapon object
      */
+    @Override
     public String substring() {
-        return "cost=" + cost +
-                ", weight=" + weight +
-                ", range=" + range +
+        return super.substring() + ", range=" + range +
                 ", properties=" + properties +
                 ", rolls=" + rolls;
     }
 
     public String display() {
         return type.toString() + ": " + String.join(", ", rolls.keySet().stream()
-                .map(key -> key + rolls.get(key).display()).toArray(String[]::new));
+                .map(key -> key + rolls.get(key).subDisplay()).toArray(String[]::new));
     }
 
     // Getters and setters
-
-    public CoinComposite getCost() {
-        return cost;
-    }
-
-    public void setCost(CoinComposite cost) {
-        this.cost = cost;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
 
     public Range getRange() {
         return range;
@@ -200,7 +174,7 @@ public class BaseWeapon implements Construct {
                 List.of(Weapon.Property.FINESSE, Weapon.Property.LIGHT,
                         Weapon.Property.THROWN), 200, 1),
         DART(new Damage.Builder().with(Damage.Type.PIERCING).with(Die.Factory.d4()).build(),
-                List.of(Weapon.Property.FINESSE, Weapon.Property.THROWN), 5, 0.25),
+                List.of(Weapon.Property.FINESSE, Weapon.Property.THROWN), 5, 0.25f),
         FLAIL(new Damage.Builder().with(Damage.Type.BLUDGEONING).with(Die.Factory.d8()).build(),
                 List.of(), 1000, 2),
         GLAIVE(new Damage.Builder().with(Damage.Type.SLASHING).with(Die.Factory.d10()).build(),
@@ -268,7 +242,7 @@ public class BaseWeapon implements Construct {
         private final Damage baseDamage;
         private final SortedSet<Weapon.Property> properties;
         private final int cost;
-        private final double weight;
+        private final float weight;
 
         /**
          * Constructor for Type enum. Accepts Damage, List of Weapon.Property, cost, and weight.
@@ -277,7 +251,7 @@ public class BaseWeapon implements Construct {
          * @param cost Cost of the weapon
          * @param weight Weight of the weapon
          */
-        Type(Damage damage, List<Weapon.Property> properties, int cost, double weight) {
+        Type(Damage damage, List<Weapon.Property> properties, int cost, float weight) {
             this.baseDamage = damage;
             this.properties = new TreeSet<>(properties);
             this.cost = cost;
@@ -297,7 +271,7 @@ public class BaseWeapon implements Construct {
             return cost;
         }
 
-        public double getWeight() {
+        public float getWeight() {
             return weight;
         }
     }
@@ -346,23 +320,37 @@ public class BaseWeapon implements Construct {
             };
             return builder.with(type).build();
         }
+
+        public static BaseWeapon readFromTXT(String filename) {
+            BaseWeapon weapon = null;
+            try (Scanner scanner = new Scanner(new File(filename))) {
+                if (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    weapon = create(line);
+                } else
+                    throw new ProtocolException("File is empty: " + filename);
+            } catch (ProtocolException e) {
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                System.out.println("File not found: " + filename);
+            }
+            return weapon;
+        }
     }
 
     /**
      * Builder class for BaseWeapon. Contains all the necessary parameters to create a new BaseWeapon object.
      */
-    protected static class Builder implements Constructor {
-        private SortedSet<Weapon.Property> properties;
-        private Optional<Integer> reach = Optional.empty();
-        private Optional<Pair<Integer, Integer>> range = Optional.empty();
-        private Damage damage;
+    protected static class Builder extends Item.Builder {
+        protected SortedSet<Weapon.Property> properties;
+//        private Optional<Integer> reach = Optional.empty();
+//        private Optional<Pair<Integer, Integer>> range = Optional.empty();
+        protected Range range;
+        protected Damage damage;
         private final HashMap<String, Roll> rolls = new HashMap<>();
         private Type type;
-        private double weight;
-        private CoinComposite cost;
         private boolean rangeSet = false;
         protected Weapon.Group group;
-        protected String name;
         private Set<Ability.Type> abilities = new HashSet<>();
 
 
@@ -370,7 +358,13 @@ public class BaseWeapon implements Construct {
         public BaseWeapon build() {
             if (rolls.isEmpty())
                 throw new IllegalStateException("BaseWeapon must have at least one attack roll.");
-            return new BaseWeapon(this, calculateRange());
+            return new BaseWeapon(this);
+        }
+
+        @Override
+        public Builder as(String name) {
+            super.as(name);
+            return this;
         }
 
         /**
@@ -387,34 +381,26 @@ public class BaseWeapon implements Construct {
             Roll result = null;
             switch (rollName) {
                 case BASE_ATTACK -> {
-                    WeaponAttack.Builder builder = new WeaponAttack.Builder().with(this.damage).as(this.name)
+                    WeaponAttack.Builder builder = new WeaponAttack.Builder().with(this.damage)
                             .with(abilities);
-                    if (reach.isPresent())
+                    if (range.isReach())
                         builder = builder.with(2);
                     result = builder.with(group).build();
                 }
-                case RANGED_ATTACK -> {
+                case RANGED_ATTACK, THROWN_ATTACK -> {
                     WeaponAttack.Builder builder = new WeaponAttack.Builder()
-                            .with(this.damage).as(this.name + " (Ranged)")
+                            .with(this.damage)
                             .with(abilities).with(group);
-                    if (this.range.isPresent())
-                        builder = builder.with(this.range.get().key(), this.range.get().value());
+                    if (this.range.isRanged())
+                        builder = builder.with(this.range.getShortRange(), this.range.getLongRange());
                     result = builder.build();
                 }
                 case VERSATILE_ATTACK -> {
                     WeaponAttack.Builder builder = new WeaponAttack.Builder()
-                            .with(this.damage.explode()).as(this.name + " (Versatile)")
+                            .with(this.damage.explode())
                             .with(abilities).with(group);
-                    if (this.reach.isPresent())
-                        builder = builder.with(this.reach.get());
-                    result = builder.build();
-                }
-                case THROWN_ATTACK -> {
-                    WeaponAttack.Builder builder = new WeaponAttack.Builder()
-                            .with(this.damage).as(this.name + " (Thrown)")
-                            .with(abilities).with(group);
-                    if (this.range.isPresent())
-                        builder = builder.with(this.range.get().key(), this.range.get().value());
+                    if (this.range.isReach())
+                        builder = builder.with(this.range.getShortRange());
                     result = builder.build();
                 }
             }
@@ -425,53 +411,62 @@ public class BaseWeapon implements Construct {
         /**
          * Calculates the range of the weapon based on the reach and range properties.
          */
-        protected Range calculateRange() {
-            return this.range.map(integerIntegerPair -> new Range(integerIntegerPair.key(), integerIntegerPair.value()))
-                    .orElseGet(() -> reach.map(Range::new).orElseGet(() -> new Range(1)));
+        protected Range getRange() {
+            return range;
         }
 
         public Builder simpleMelee() {
+            range = new Range();
             rangeSet = true;
             return this;
         }
 
-        public Builder withWeight(double weight) {
-            this.weight = weight;
+        @Override
+        public Builder weigh(float weight) {
+            super.weigh(weight);
             return this;
         }
 
-        public Builder withCost(int cost) {
-            this.cost = new CoinComposite(Coin.Factory.change(cost));
+        public Builder with(int cost) {
+            super.with(cost);
             return this;
         }
 
-        public Builder with(SortedSet<Weapon.Property> properties) {
-            this.properties = new TreeSet<>(properties);
-            for (Weapon.Property property : this.properties) {
-                with(property);
-            }
+        public Builder with(Set<Weapon.Property> properties) {
+            if (!properties.isEmpty()) {
+                this.properties = new TreeSet<>(properties);
+                for (Weapon.Property property : this.properties) {
+                    with(property);
+                }
+            } else
+                this.properties = new TreeSet<>();
             return this;
         }
 
         public Builder reach() {
-            if (!properties.contains(Weapon.Property.REACH))
-                throw new IllegalStateException("BaseWeapon must have REACH property to have reach: "
-                        + reach);
-            else if (range.isPresent())
+            if (range != null && range.isRanged())
                 throw new IllegalStateException("BaseWeapon cannot have RANGED and REACH.");
-            this.reach = Optional.of(1);
+            if (range == null)
+                range = new Range();
+            this.range.setShortRange(2);
             rangeSet = true;
             return this;
         }
 
         public Builder with(int rShort, int rLong) {
-            if (reach.isPresent())
+            if (range != null && range.isReach())
                 throw new IllegalStateException("BaseWeapon cannot have REACH and RANGED.");
             else if (rShort > rLong)
                 throw new IllegalArgumentException(String.format("Short range (%d) must be less than " +
                         "long range (%d)", rShort, rLong));
             assert rShort != 0 && rLong != 0;
-            this.range = Optional.of(new Pair<>(rShort / 5, rLong / 5));
+            this.range = new Range(rShort / 5, rLong / 5);
+            rangeSet = true;
+            return this;
+        }
+
+        public Builder with(Range range) {
+            this.range = range;
             rangeSet = true;
             return this;
         }
@@ -484,9 +479,9 @@ public class BaseWeapon implements Construct {
         public Builder with(BaseWeapon.Type type) {
             this.type = type;
             this.group = Weapon.Group.of(type);
-            this.name = type.name();
-            withCost(type.getCost());
-            withWeight(type.getWeight());
+            super.as(type.name());
+            with(type.getCost());
+            weigh(type.getWeight());
             with(type.getBaseDamage());
             setAbilities(Weapon.Property.abilities(type.getProperties()));
             if (type == Type.NET)
@@ -518,9 +513,6 @@ public class BaseWeapon implements Construct {
             this.group = group;
         }
 
-        protected void setName(String name) {
-            this.name = name;
-        }
 
         protected void setAbilities(Set<Ability.Type> abilities) {
             this.abilities = abilities;
@@ -539,12 +531,11 @@ public class BaseWeapon implements Construct {
          */
         public static boolean isNotMeleeRange(Weapon.Property... props) {
             Set<Weapon.Property> propertySet = new HashSet<Weapon.Property>(Arrays.asList(props));
+            if (propertySet.isEmpty())
+                return false;
             return propertySet.contains(Weapon.Property.REACH)
                     || propertySet.contains(Weapon.Property.RANGED)
                     || propertySet.contains(Weapon.Property.THROWN);
         }
-
     }
-
-
 }

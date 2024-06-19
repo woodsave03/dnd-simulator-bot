@@ -66,12 +66,17 @@ public class Contest extends Roll {
      * @return a string representation of the Contest
      */
     @Override
-    public String display() {
-        StringBuilder builder = new StringBuilder("Contest: ").append(sourceSkill).append(" vs (");
+    public String subDisplay() {
+        StringBuilder builder = new StringBuilder(": ").append(sourceSkill).append(" vs (");
         for (Skill skill : targetOptions) {
             builder.append(skill).append(" or ");
         }
         return builder.substring(0, builder.length() - 4) + ")";
+    }
+
+    @Override
+    public String display() {
+        return "Contest" + subDisplay();
     }
 
     /**

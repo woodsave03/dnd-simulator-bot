@@ -1,0 +1,6 @@
+Crossbow, light
+Type: Simple Ranged Weapon Cost: 25 gp Weight: 5 lbs
+Proficiency with a light crossbow allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Crossbow, light	25 gp	1d8 piercing	5 lbs	Ammunition, Loading, (Range 80/320), Two-Handed

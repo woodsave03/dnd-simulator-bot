@@ -1,0 +1,6 @@
+Mace
+Type: Simple Melee Weapon Cost: 5 gp Weight: 4 lbs
+Proficiency with a mace allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Mace	5 gp	1d6 bludgeoning	4 lbs	

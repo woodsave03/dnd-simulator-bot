@@ -1,0 +1,6 @@
+Quarterstaff
+Type: Simple Melee Weapon Cost: 2 sp Weight: 4 lbs
+Proficiency with a quarterstaff allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Quarterstaff	2 sp	1d6 bludgeoning	4 lbs	Versatile (1d8)

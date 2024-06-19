@@ -1,0 +1,6 @@
+Crossbow, hand
+Type: Martial Ranged Weapon Cost: 75 gp Weight: 3 lbs
+Proficiency with a hand crossbow allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Crossbow, hand	75 gp	1d6 piercing	3 lbs	Ammunition, (Range 30/120), Light, Loading

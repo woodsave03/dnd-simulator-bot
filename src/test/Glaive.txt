@@ -1,0 +1,6 @@
+Glaive
+Type: Martial Melee Weapon Cost: 20 gp Weight: 6 lbs
+Proficiency with a glaive allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Glaive	20 gp	1d10 slashing	6 lbs	Heavy, Reach, Two-Handed

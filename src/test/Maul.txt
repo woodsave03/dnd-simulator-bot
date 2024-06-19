@@ -1,0 +1,6 @@
+Maul
+Type: Martial Melee Weapon Cost: 10 gp Weight: 10 lbs
+Proficiency with a maul allows you to add your proficiency bonus to the attack roll for any attack you make with it.
+
+Name	Cost	Damage	Weight	Properties
+Maul	10 gp	2d6 bludgeoning	10 lbs	Heavy, Two-Handed

@@ -10,8 +10,10 @@ import java.net.ProtocolException;
 public class WeaponTests {
     @Test
     public void testWeaponString() {
-        System.out.println(BaseWeapon.Factory.create("Dagger").display());
         System.out.println(BaseWeapon.Factory.create("Net").display());
+        System.out.println(BaseWeapon.Factory.create("Longsword").display());
+        System.out.println(BaseWeapon.Factory.create("Dagger").display());
+        System.out.println(BaseWeapon.Factory.create("Shortsword").display());
     }
 
     @Test
@@ -28,8 +30,8 @@ public class WeaponTests {
                 .with(new Damage.Builder()
                         .with(Damage.Type.PIERCING)
                         .with(Die.Factory.d4()).build())
-                .withWeight(1)
-                .withCost(200)
+                .weigh(1)
+                .with(200)
                 .with(Weapon.Group.SIMPLE)
                 .as("Dagger")
                 .with(Weapon.Property.FINESSE, Weapon.Property.LIGHT, Weapon.Property.THROWN);
@@ -70,5 +72,20 @@ public class WeaponTests {
     @Test
     public void testWeaponFactoryFunction() {
         Assertions.assertDoesNotThrow(() -> BaseWeapon.Factory.create("Dagger"));
+    }
+
+    @Test
+    public void testTXTtoWeapon() {
+        String filepath = "src/test/warhammerPaste.txt";
+        CustomWeapon weapon = null;
+        CustomWeapon longbow = null;
+        try {
+            weapon = CustomWeapon.Builder.readFromFile(CustomWeapon.Factory.convertTXT(filepath));
+            longbow = CustomWeapon.Builder.readFromFile(CustomWeapon.Factory.convertTXT("src/test/longbowPaste.txt"));
+        } catch (ProtocolException e) {
+            System.out.print(e.getMessage());
+        }
+        Assertions.assertEquals(weapon, BaseWeapon.Factory.create("Warhammer"));
+        Assertions.assertEquals(longbow, BaseWeapon.Factory.create("Longbow"));
     }
 }
