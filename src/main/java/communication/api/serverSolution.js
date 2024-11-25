@@ -16,6 +16,15 @@ app.get('/fetch', async (req, res) => {
             error: 'Failed to fetch data'
         });
     }
+});
+
+app.get('/:class', async (req, res) => {
+    try {
+        const classesUrl = await fetch(apiEndpoint).json().classes;
+        const data = await fetch(classUrl);
+    } catch (error) {
+
+    }
 })
 
 app.listen(PORT, () => {

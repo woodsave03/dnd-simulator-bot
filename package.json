@@ -1,0 +1,17 @@
+{
+  "name": "dnd-simulator-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woodsave03/dnd-simulator-bot.git"
+  },
+  "private": true,
+  "devDependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
