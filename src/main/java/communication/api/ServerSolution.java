@@ -12,7 +12,7 @@ public class ServerSolution {
 
     public static void main(String[] args) {
         try {
-            URL url = new URL("http://localhost:3000/fetch");
+            URL url = new URL("https://api.open5e.com/v1/monsters/?format=json");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
